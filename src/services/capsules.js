@@ -36,7 +36,12 @@ export const capsulesApi = createApi({
         };
       },
     }),
+    getCapsuleByName: builder.query({
+      query: (name) => ({
+        url: `/capsules/${name}`,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllCapsulesQuery } = capsulesApi;
+export const { useGetAllCapsulesQuery, useGetCapsuleByNameQuery } = capsulesApi;

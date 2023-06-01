@@ -2,9 +2,12 @@ import PropTypes from "prop-types";
 import Badge from "../Badge";
 import default_image from "../../assets/default-capsule.jpg";
 
-export default function Capsule({ capsule }) {
+export default function Capsule({ capsule, onClick }) {
   return (
-    <div className="border rounded-md relative">
+    <div
+      className="border rounded-md relative cursor-pointer"
+      onClick={onClick}
+    >
       <img
         src={capsule.image ? capsule.image : default_image}
         alt="Capsule thumbnail"
@@ -34,4 +37,5 @@ export default function Capsule({ capsule }) {
 
 Capsule.propTypes = {
   capsule: PropTypes.object.isRequired,
+  onClick: PropTypes.func.isRequired,
 };

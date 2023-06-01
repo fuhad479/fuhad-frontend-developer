@@ -1,8 +1,14 @@
 import Capsule from "./Capsule";
+import Pagination from "rc-pagination";
+import CapsuleModal from "./CapsuleModal";
+import right_arrow from "../../assets/right-arrow.svg";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useGetAllCapsulesQuery } from "../../services/capsules";
 
 export default function Capsules() {
+  const [capsule, setCapsule] = useState("");
+
   const { status, mission, reuseCount } = useSelector(
     (state) => state.capsules
   );
@@ -20,7 +26,11 @@ export default function Capsules() {
       return (
         <div className="grid grid-cols-4 gap-5">
           {data.map((capsule) => (
-            <Capsule key={capsule.capsule_serial} capsule={capsule} />
+            <Capsule
+              key={capsule.capsule_serial}
+              capsule={capsule}
+              onClick={() => setCapsule(capsule.capsule_serial)}
+            />
           ))}
         </div>
       );
@@ -31,7 +41,20 @@ export default function Capsules() {
 
   return (
     <section className="">
-      <div className="container">{renderCapsules()}</div>
+      <div className="container">
+        {renderCapsules()}
+        <Pagination
+          pageSize={8}
+          total={data?.length}
+          hideOnSinglePage={true}
+          nextIcon={<img src={right_arrow} alt="Next icon" />}
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        />
+      </div>
+      {capsule !== "" && <CapsuleModal capsule={capsule} setCapsule={setCapsule} />}
     </section>
   );
 }
