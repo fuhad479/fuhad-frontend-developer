@@ -22,7 +22,7 @@ export default function SearchForm() {
   return (
     <section className="py-[100px]">
       <div className="container">
-        <div className="border p-[30px] rounded-md">
+        <div className="border p-[30px] rounded-md shadow-[0_0_50px_rgba(0,0,0,0.1)]">
           <h2 className="text-4xl font-bold mb-8">
             Find Your Space Capsule: Explore SpaceX’s Mission-Specific Data
           </h2>

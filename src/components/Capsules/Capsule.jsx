@@ -5,7 +5,7 @@ import default_image from "../../assets/default-capsule.jpg";
 export default function Capsule({ capsule, onClick }) {
   return (
     <div
-      className="border rounded-md relative cursor-pointer"
+      className="border rounded-md relative cursor-pointer shadow-[0_0_30px_rgba(0,0,0,0.2)]"
       onClick={onClick}
     >
       <img

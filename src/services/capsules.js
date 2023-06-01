@@ -29,8 +29,6 @@ export const capsulesApi = createApi({
             : "/capsules";
         }
 
-        generateUrl("/capsules");
-
         return {
           url: generateUrl("/capsules"),
         };

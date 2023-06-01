@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.rc-pagination .rc-pagination-prev,
+.rc-pagination .rc-pagination-next,
+.rc-pagination .rc-pagination-item {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: solid 1px;
+  margin: 0 8px;
+}
+
+.rc-pagination .rc-pagination-prev:hover,
+.rc-pagination .rc-pagination-next:hover,
+.rc-pagination .rc-pagination-item:hover {
+  background: rgb(59, 130, 246);
+  color: white;
+  border-color: rgb(59, 130, 246);
+}
+
+.rc-pagination .rc-pagination-item-active {
+  background: rgb(59, 130, 246);
+  color: white;
+  border-color: rgb(59, 130, 246);
+}
