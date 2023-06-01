@@ -37,7 +37,7 @@ export default function Capsules() {
       return <div className="">Loading</div>;
     } else if (!isLoading && data.length > 0) {
       return (
-        <div className="grid grid-cols-4 gap-5">
+        <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-5">
           {capsules?.map((capsule) => (
             <Capsule
               key={capsule.capsule_serial}
@@ -53,8 +53,8 @@ export default function Capsules() {
   }
 
   return (
-    <section className="">
-      <div className="container">
+    <section className="pb-[100px]">
+      <div className="container px-4">
         {renderCapsules()}
         <Pagination
           pageSize={8}
@@ -68,7 +68,6 @@ export default function Capsules() {
             display: "flex",
             alignItems: "center",
             marginTop: '30px',
-            marginBottom: '100px'
           }}
         />
       </div>

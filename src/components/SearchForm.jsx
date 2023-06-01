@@ -21,12 +21,12 @@ export default function SearchForm() {
 
   return (
     <section className="py-[100px]">
-      <div className="container">
+      <div className="container px-4">
         <div className="border p-[30px] rounded-md shadow-[0_0_50px_rgba(0,0,0,0.1)]">
-          <h2 className="text-4xl font-bold mb-8">
+          <h2 className="md:text-4xl text-xl font-bold mb-8">
             Find Your Space Capsule: Explore SpaceX’s Mission-Specific Data
           </h2>
-          <form className="flex gap-2" onSubmit={onSubmitHandler}>
+          <form className="flex md:flex-row flex-col gap-2" onSubmit={onSubmitHandler}>
             <select
               onChange={(event) => dispatch(changeStatus(event.target.value))}
               defaultValue={status}
@@ -52,7 +52,7 @@ export default function SearchForm() {
             />
             <button
               type="submit"
-              className="bg-blue-500 text-white font-semibold rounded-md px-4"
+              className="bg-blue-500 text-white font-semibold rounded-md p-4"
             >
               Search
             </button>

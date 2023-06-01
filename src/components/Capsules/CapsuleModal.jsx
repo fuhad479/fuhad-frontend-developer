@@ -10,7 +10,7 @@ export default function CapsuleModal({ capsule, setCapsule }) {
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.7)]">
-      <div className="bg-white p-4 relative rounded-md max-w-[400px]">
+      <div className="bg-white p-4 relative rounded-md md:max-w-[400px] md:max-w-full w-[70%]">
         <img
           src={cross_icon}
           alt="Cross icon"
