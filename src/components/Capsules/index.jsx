@@ -1,8 +1,17 @@
 import Capsule from "./Capsule";
+import { useSelector } from "react-redux";
 import { useGetAllCapsulesQuery } from "../../services/capsules";
 
 export default function Capsules() {
-  const { data, isLoading } = useGetAllCapsulesQuery({status: 'active'});
+  const { status, mission, reuseCount } = useSelector(
+    (state) => state.capsules
+  );
+
+  const { data, isLoading } = useGetAllCapsulesQuery({
+    status,
+    mission,
+    reuseCount,
+  });
 
   function renderCapsules() {
     if (isLoading) {

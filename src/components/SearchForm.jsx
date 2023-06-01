@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeStatus,
+  changeMission,
+  changeReuseCount,
+} from "../features/capsulesSlice";
 import Input from "./Input";
 
 export default function SearchForm() {
-  // these states represent search filter's values
-  const [status, setStatus] = useState("");
-  const [mission, setMission] = useState("");
-  const [reuseCount, setReuseCount] = useState("");
+  const dispatch = useDispatch();
+
+  const { status, mission, reuseCount } = useSelector(
+    (state) => state.capsules
+  );
 
   // this function will submit the form
   function onSubmitHandler(event) {
@@ -21,22 +27,33 @@ export default function SearchForm() {
             Find Your Space Capsule: Explore SpaceX’s Mission-Specific Data
           </h2>
           <form className="flex gap-2" onSubmit={onSubmitHandler}>
-            <Input
-              placeholder="Status"
-              value={status}
-              onChange={(event) => setStatus(event.target.value)}
-            />
+            <select
+              onChange={(event) => dispatch(changeStatus(event.target.value))}
+              defaultValue={status}
+              className="border w-full focus:outline-none rounded-md p-4"
+            >
+              <option value="">Select a status</option>
+              <option value="active">Active</option>
+              <option value="retired">Retired</option>
+              <option value="unknown">Unknown</option>
+              <option value="destroyed">Destroyed</option>
+            </select>
             <Input
               placeholder="Mission"
               value={mission}
-              onChange={(event) => setMission(event.target.value)}
+              onChange={(event) => dispatch(changeMission(event.target.value))}
             />
             <Input
               placeholder="Reuse count"
               value={reuseCount}
-              onChange={(event) => setReuseCount(event.target.value)}
+              onChange={(event) =>
+                dispatch(changeReuseCount(event.target.value))
+              }
             />
-            <button type="submit" className="bg-blue-500 text-white font-semibold rounded-md px-4">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white font-semibold rounded-md px-4"
+            >
               Search
             </button>
           </form>
