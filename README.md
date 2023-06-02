@@ -1,3 +1,13 @@
+![Alt Text](screenshot.png)
+
+# Important things please check this out first
+
+checkout the video presentation [Video presentation of the app](https://drive.google.com/file/d/1F8G6xPDybvAKlCKspXflvbNpPUkYUeIJ/view?usp=sharing).
+
+# Test issue
+
+sometimes running `yarn test` command isn't running test properly for that you may need to press `a` after it says no tests found check this [video](https://www.loom.com/share/fc88e31001604102958b7be48386b221) how to do it
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
