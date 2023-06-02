@@ -1,41 +1,21 @@
-import PropTypes from "prop-types";
-import Badge from "../Badge";
-import default_image from "../../assets/default-capsule.jpg";
+import capsule_image from "../../assets/capsule.webp";
+import Badge from "./Badge";
 
-export default function Capsule({ capsule, onClick }) {
+export default function Capsule({ capsule, setCapsuleId }) {
   return (
     <div
-      className="border rounded-md relative cursor-pointer shadow-[0_0_30px_rgba(0,0,0,0.2)]"
-      onClick={onClick}
+      data-testId="capsule"
+      onClick={() => setCapsuleId(capsule.id)}
+      className="border border-[#cecece] rounded-md overflow-hidden cursor-pointer hover:scale-[1.05] shadow-[0px_0px_30px_rgba(0,0,0,0.1)] transition duration-300"
     >
-      <img
-        src={capsule.image ? capsule.image : default_image}
-        alt="Capsule thumbnail"
-        className="overflow-hidden rounded-t-md"
-      />
-      <Badge status={capsule.status} />
-      <div className="p-3">
-        <div className="flex gap-2 mb-2 border-b pb-2">
-          <div className="text-sm">
-            <span className="font-medium">Name:</span>{" "}
-            <span>{capsule.capsule_serial}</span>
-          </div>
-          <div className="text-sm">
-            <span className="font-medium">Mission:</span>{" "}
-            <span>{capsule?.missions[0]?.name}</span>
-          </div>
-          <div className="text-sm">
-            <span className="font-medium">Landings:</span>{" "}
-            <span>{capsule.landings}</span>
-          </div>
+      <img src={capsule_image} alt="Capsule preview" />
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="font-bold">{capsule.serial}</h3>
+          <Badge capsuleStatus={capsule.status} />
         </div>
-        <p>{capsule.details}</p>
+        <h2 className="">{capsule.last_update}</h2>
       </div>
     </div>
   );
 }
-
-Capsule.propTypes = {
-  capsule: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-};

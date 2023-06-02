@@ -1,45 +1,68 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const capsulesApi = createApi({
+const capsulesApi = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://api.spacexdata.com/v3",
+    baseUrl: "https://api.spacexdata.com/v4",
   }),
   endpoints: (builder) => ({
-    getAllCapsules: builder.query({
-      query: ({ status, mission, reuseCount }) => {
-        // console.log({ status, mission, reuseCount });
-
-        function generateUrl(urlPath) {
-          const urlParams = [];
+    getCapsules: builder.mutation({
+      query: ({ page, status, serial, reuse_count }) => {
+        function generateQuery() {
+          let query = {};
           if (status !== "") {
-            urlParams.push(`status=${status}`);
+            query.status = status;
           }
 
-          if (mission !== "") {
-            urlParams.push(`mission=${mission}`);
+          if (serial !== "") {
+            query.serial = serial;
           }
 
-          if (reuseCount !== "") {
-            urlParams.push(`reuse_count=${reuseCount}`);
+          if (reuse_count !== "") {
+            query.reuse_count = reuse_count;
           }
 
-          return urlParams.length > 0
-            ? `${urlPath}/?${urlParams.join("&")}`
-            : "/capsules";
+          return query;
         }
 
+        const queryParams = generateQuery();
+
         return {
-          url: generateUrl("/capsules"),
+          url: `/capsules/query`,
+          method: "POST",
+          body: {
+            query: queryParams,
+            options: { limit: 8, page },
+          },
         };
       },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          capsulesApi.util.updateQueryData(
+            "getCapsule",
+            arg.page,
+            (draft) => {
+              console.log(JSON.stringify(draft));
+            }
+          )
+        );
+
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          patchResult.undo();
+        }
+      },
     }),
-    getCapsuleByName: builder.query({
-      query: (name) => ({
-        url: `/capsules/${name}`,
-      }),
+    getCapsule: builder.query({
+      query: (serial) => {
+        return {
+          url: `/capsules/${serial}`,
+        };
+      },
     }),
   }),
 });
 
-export const { useGetAllCapsulesQuery, useGetCapsuleByNameQuery } = capsulesApi;
+export const { useGetCapsulesMutation, useGetCapsuleQuery } = capsulesApi;
+export default capsulesApi;

@@ -1,54 +1,44 @@
-import Capsule from "./Capsule";
-import Pagination from "rc-pagination";
-import CapsuleModal from "./CapsuleModal";
-import right_arrow from "../../assets/right-arrow.svg";
-import left_arrow from "../../assets/left-arrow.svg";
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
+import { ReactComponent as LeftArrow } from "../../assets/left-arrow.svg";
+import { ReactComponent as RightArrow } from "../../assets/right-arrow.svg";
+import { useGetCapsulesMutation } from "../../services/capsules";
 import { useSelector } from "react-redux";
-import { useGetAllCapsulesQuery } from "../../services/capsules";
+import Pagination from "rc-pagination";
+import Capsule from "./Capsule";
+import CapsuleModal from "./CapsuleModal";
 
 export default function Capsules() {
-  const [capsule, setCapsule] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [capsules, setCapsules] = useState([]);
+  const [capsuleId, setCapsuleId] = useState("");
 
-  const { status, mission, reuseCount } = useSelector(
-    (state) => state.capsules
-  );
+  const { serial, status, reuseCount } = useSelector((state) => state.capsules);
 
-  const { data, isLoading } = useGetAllCapsulesQuery({
-    status,
-    mission,
-    reuseCount,
-  });
+  const [getCapsules, { data: capsules, isLoading, isSuccess }] =
+    useGetCapsulesMutation();
 
   useEffect(() => {
-    if (!isLoading && currentPage === 1) {
-      setCapsules(data?.slice(0, 8));
-    } else if (!isLoading && currentPage === 2) {
-      setCapsules(data?.slice(8, 16));
-    } else if (!isLoading && currentPage === 3) {
-      setCapsules(data?.slice(16, -1));
-    }
-  }, [isLoading, currentPage, data]);
+    getCapsules({ page: 1, serial, status, reuse_count: reuseCount });
+  }, [serial, status, reuseCount]);
 
   function renderCapsules() {
     if (isLoading) {
-      return <div className="">Loading</div>;
-    } else if (!isLoading && data.length > 0) {
+      return <div>Loading capsules</div>;
+    } else if (!isLoading && isSuccess) {
       return (
-        <div className="grid lg:grid-cols-4 md:grid-cols-3 gap-5">
-          {capsules?.map((capsule) => (
+        <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {capsules?.docs?.map((capsule) => (
             <Capsule
-              key={capsule.capsule_serial}
+              key={capsule.id}
               capsule={capsule}
-              onClick={() => setCapsule(capsule.capsule_serial)}
+              setCapsuleId={setCapsuleId}
             />
           ))}
         </div>
       );
-    } else if (!isLoading && data.length <= 0) {
-      return <div>No items found</div>;
+    } else if (!isLoading && !isSuccess) {
+      return <div>Failed to load capsules</div>;
+    } else if (!isLoading && capsules.length < 0) {
+      return <div>Couldn't find any capsule</div>;
     }
   }
 
@@ -57,22 +47,22 @@ export default function Capsules() {
       <div className="container px-4">
         {renderCapsules()}
         <Pagination
-          pageSize={8}
-          current={currentPage}
-          total={data?.length}
           hideOnSinglePage={true}
-          onChange={(currentPage) => setCurrentPage(currentPage)}
-          nextIcon={<img src={right_arrow} alt="Next icon" />}
-          prevIcon={<img src={left_arrow} alt="Previous icon" />}
+          current={capsules?.page}
+          pageSize={8}
+          onChange={(page) => getCapsules({ page })}
+          nextIcon={<RightArrow width={20} height={20} />}
+          prevIcon={<LeftArrow width={20} height={20} />}
+          total={capsules?.totalDocs}
           style={{
             display: "flex",
-            alignItems: "center",
-            marginTop: '30px',
+            gap: "16px",
+            marginTop: "50px",
           }}
         />
       </div>
-      {capsule !== "" && (
-        <CapsuleModal capsule={capsule} setCapsule={setCapsule} />
+      {capsuleId !== "" && (
+        <CapsuleModal capsuleId={capsuleId} setCapsuleId={setCapsuleId} />
       )}
     </section>
   );

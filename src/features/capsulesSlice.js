@@ -4,22 +4,22 @@ const capsulesSlice = createSlice({
   name: "capsules",
   initialState: {
     status: "",
-    mission: "",
+    serial: "",
     reuseCount: "",
   },
   reducers: {
-    changeStatus: (state, action) => {
+    changeStatus(state, action) {
       state.status = action.payload;
     },
-    changeMission: (state, action) => {
-      state.mission = action.payload;
+    changeSerial(state, action) {
+      state.serial = action.payload.toUpperCase();
     },
-    changeReuseCount: (state, action) => {
+    changeReuseCount(state, action) {
       state.reuseCount = action.payload;
     },
   },
 });
 
-export const { changeStatus, changeMission, changeReuseCount } =
+export const { changeReuseCount, changeSerial, changeStatus } =
   capsulesSlice.actions;
-export default capsulesSlice;
+export default capsulesSlice

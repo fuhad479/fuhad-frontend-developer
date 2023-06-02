@@ -1,80 +1,62 @@
-import PropTypes from "prop-types";
-import cross_icon from "../../assets/cross-icon.svg";
-import default_image from "../../assets/default-capsule.jpg";
-import { useGetCapsuleByNameQuery } from "../../services/capsules";
+import capsule_modal from "../../assets/capsule.webp";
+import { ReactComponent as CrossIcon } from "../../assets/cross-icon.svg";
+import { useGetCapsuleQuery } from "../../services/capsules";
 
-export default function CapsuleModal({ capsule, setCapsule }) {
-  const { data, isLoading } = useGetCapsuleByNameQuery(capsule);
-
-  console.log(data);
+export default function CapsuleModal({ capsuleId, setCapsuleId }) {
+  const { data, isLoading } = useGetCapsuleQuery(capsuleId);
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-[rgba(0,0,0,0.7)]">
-      <div className="bg-white p-4 relative rounded-md md:max-w-[400px] md:w-full w-[70%]">
-        <img
-          src={cross_icon}
-          alt="Cross icon"
-          width={25}
-          height={25}
-          className="absolute -right-[35px] cursor-pointer"
-          onClick={() => setCapsule("")}
-        />
-        {isLoading ? (
-          "Loading"
-        ) : (
-          <div className="">
+    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center backdrop-blur-sm after:absolute after:w-full after:h-full after:bg-[rgba(0,0,0,0.5)] z-0 after:-z-[1]">
+      {isLoading ? (
+        <div className="w-[60%] p-[30px] bg-white rounded-lg overflow-hidden shadow-xl z-0">
+          Loading
+        </div>
+      ) : (
+        <div className="w-[60%] bg-white rounded-lg overflow-hidden shadow-xl z-0">
+          <div className="w-full h-[300px] relative">
             <img
-              src={default_image}
-              width={400}
-              height={300}
-              alt="Capsule image"
-              className="rounded-md mb-3"
+              src={capsule_modal}
+              alt="Capsule preview"
+              className="w-full h-full object-cover"
             />
-            <p className="mb-3">{data.details}</p>
-            <div className="flex justify-between">
-              <span className="font-bold">Name:</span>{" "}
-              <span>{data.capsule_serial}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-bold">Landings:</span>{" "}
-              <span>{data.landings}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-bold">Original launch:</span>{" "}
-              <span>{`${new Date(data.original_launch).getDate()}/${new Date(
-                data.original_launch
-              ).getMonth()}/${new Date(
-                data.original_launch
-              ).getFullYear()}`}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-bold">Launch unix:</span>{" "}
-              <span>{data.original_launch_unix}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-bold">Reuse count:</span>{" "}
-              <span>{data.reuse_count}</span>
-            </div>
-            {data?.missions?.map((mission, index) => (
-              <div key={index}>
-                <div className="flex justify-between">
-                  <span className="font-bold">Mission:</span>{" "}
-                  <span>{mission.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-bold">Flight:</span>{" "}
-                  <span>{mission.flight}</span>
-                </div>
-              </div>
-            ))}
+            <div className="after:absolute after:top-0 after:w-full after:h-full after:bg-[rgba(0,0,0,0.3)]"></div>
+            <button
+              type="button"
+              onClick={() => setCapsuleId("")}
+              className="absolute top-[20px] right-[20px] w-[30px] h-[30px] flex items-center justify-center bg-[rgba(255,255,255,0.4)] rounded-full"
+            >
+              <CrossIcon width={20} height={20} strokeWidth={2} />
+            </button>
           </div>
-        )}
-      </div>
+          <div className="p-[30px]">
+            <h2 className="font-bold text-xl mb-[20px]">{data?.last_update}</h2>
+            <div className="flex justify-between">
+              <span className="font-medium">Serial number:</span>
+              <span>{data?.serial}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Landed on land:</span>
+              <span>{data?.land_landings} times</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Landed on water:</span>
+              <span className="capitalize">{data?.water_landings}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Total reused:</span>
+              <span>{data?.reuse_count} times</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Current status:</span>
+              <span className="capitalize">{data?.status}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="font-medium">Type:</span>
+              <span className="capitalize">{data?.type}</span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
-CapsuleModal.propTypes = {
-  capsule: PropTypes.string.isRequired,
-  setCapsule: PropTypes.func.isRequired,
-};

@@ -1,62 +1,76 @@
+import Input from "./Input";
+import down_arrow from "../assets/down-arrow.svg";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  changeStatus,
-  changeMission,
   changeReuseCount,
+  changeSerial,
+  changeStatus,
 } from "../features/capsulesSlice";
-import Input from "./Input";
 
 export default function SearchForm() {
+  const { serial, reuseCount } = useSelector((state) => state.capsules);
+
   const dispatch = useDispatch();
 
-  const { status, mission, reuseCount } = useSelector(
-    (state) => state.capsules
-  );
-
-  // this function will submit the form
-  function onSubmitHandler(event) {
-    event.preventDefault();
-    console.log("form submitted");
-  }
-
   return (
-    <section className="py-[100px]">
+    <section data-testId="search-form" className="relative py-[6.25rem]">
       <div className="container px-4">
-        <div className="border p-[30px] rounded-md shadow-[0_0_50px_rgba(0,0,0,0.1)]">
-          <h2 className="md:text-4xl text-xl font-bold mb-8">
-            Find Your Space Capsule: Explore SpaceX’s Mission-Specific Data
-          </h2>
-          <form className="flex md:flex-row flex-col gap-2" onSubmit={onSubmitHandler}>
+        <div className="p-[1.875rem] bg-white rounded-lg -mt-[11.0625rem] w-[80%] mx-auto shadow-[0rem_1.875rem_1.875rem_rgba(0,0,0,0.1)]">
+          <div className="flex gap-4 md:flex-row flex-col">
             <select
+              data-testId="select"
+              className="[appearance:none] [-webkit-appearance:none] [-moz-appearance:none] !bg-no-repeat !bg-right !bg-[1.5625rem,1.5625rem] border border-[#cecece] py-2 px-3 focus:outline-none rounded-md w-full focus:outline focus:outline-2 focus:outline-offset-0 focus:outline-[#cecece]"
               onChange={(event) => dispatch(changeStatus(event.target.value))}
-              defaultValue={status}
-              className="border w-full focus:outline-none rounded-md p-4"
+              style={{ background: `url('${down_arrow}')` }}
             >
-              <option value="">Select a status</option>
+              <option value="">Search by status</option>
               <option value="active">Active</option>
               <option value="retired">Retired</option>
               <option value="unknown">Unknown</option>
               <option value="destroyed">Destroyed</option>
             </select>
             <Input
-              placeholder="Mission"
-              value={mission}
-              onChange={(event) => dispatch(changeMission(event.target.value))}
+              placeholder="Search by serial"
+              value={serial}
+              onChange={(event) => dispatch(changeSerial(event.target.value))}
             />
             <Input
-              placeholder="Reuse count"
+              placeholder="Search by reuse count"
               value={reuseCount}
               onChange={(event) =>
                 dispatch(changeReuseCount(event.target.value))
               }
             />
-            <button
-              type="submit"
-              className="bg-blue-500 text-white font-semibold rounded-md p-4"
-            >
-              Search
-            </button>
-          </form>
+          </div>
+          <div
+            data-testId="trending-serials"
+            className="mt-4 flex md:flex-row flex-col gap-4"
+          >
+            <div className="font-bold text-sm">Trending serials: </div>
+            <div className="flex gap-4">
+              <span
+                data-testId="serial"
+                onClick={() => dispatch(changeSerial('C101'))}
+                className="text-xs font-medium border border-[#cecece] p-0.5 px-2.5 cursor-pointer"
+              >
+                C101
+              </span>
+              <span
+                data-testId="serial"
+                onClick={() => dispatch(changeSerial('C204'))}
+                className="text-xs font-medium border border-[#cecece] p-0.5 px-2.5 cursor-pointer"
+              >
+                C204
+              </span>
+              <span
+                data-testId="serial"
+                onClick={() => dispatch(changeSerial('C212'))}
+                className="text-xs font-medium border border-[#cecece] p-0.5 px-2.5 cursor-pointer"
+              >
+                C212
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
